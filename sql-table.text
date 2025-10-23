@@ -1,0 +1,27 @@
+CREATE TABLE public.customer (
+	customer_id serial4 NOT NULL,
+	nationality_id int4 NOT NULL,
+	cst_name varchar(255) NOT NULL,
+	cst_dob varchar(50) NOT NULL,
+	created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
+	updated_at timestamp NULL,
+	CONSTRAINT customer_pkey PRIMARY KEY (customer_id)
+);
+
+
+CREATE TABLE public.family_list (
+	fl_id serial4 NOT NULL,
+	cst_id int4 NOT NULL,
+	fl_name varchar(50) NOT NULL,
+	fl_dob varchar(50) NOT NULL,
+	created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
+	CONSTRAINT family_list_pkey PRIMARY KEY (fl_id)
+);
+
+CREATE TABLE public.nationality (
+	nationality_id serial4 NOT NULL,
+	nationality_name varchar(50) NOT NULL,
+	nationality_code varchar(50) NOT NULL,
+	created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
+	CONSTRAINT nationality_pkey PRIMARY KEY (nationality_id)
+);

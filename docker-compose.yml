@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: .
+      target: development  # Use development stage for hot reload
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - PORT=8080
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=golang_db
+    volumes:
+      - .:/app  # Mount current directory for hot reload
+      - /app/tmp  # Avoid mounting tmp directory
+    networks:
+      - go-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=golang_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - go-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  go-network:
+    driver: bridge
