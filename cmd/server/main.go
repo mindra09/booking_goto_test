@@ -13,6 +13,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -38,12 +39,19 @@ func main() {
 	r := mux.NewRouter()
 	r.Use(middleware.LoggingMiddleware)
 
+	// CORS configuration
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	originsOk := handlers.AllowedOrigins([]string{"*"}) // or specific origins: {"http://localhost:3000", "https://example.com"}
+	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
+
 	api := r.PathPrefix("/api/v1").Subrouter()
 	h.RegisterRoutes(api)
 
+	handler := handlers.CORS(originsOk, headersOk, methodsOk)(r)
+
 	srv := &http.Server{
 		Addr:    ":" + cfg.Port,
-		Handler: r,
+		Handler: handler,
 	}
 
 	go func() {
