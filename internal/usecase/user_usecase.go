@@ -93,7 +93,7 @@ func (u *UserUsecase) Update(ctx context.Context, user *model.User) (err error) 
 		msgErrorDob := "Family validation failed for " + v.Dob + ": is required"
 
 		err = validation.ValidateStruct(&v,
-			validation.Field(&v.FamilyID, validation.Required.Error("Family ID is required"), validation.Min(0).Error("Family ID must be a positive integer or zero for new family record")),
+			validation.Field(&v.FamilyID, validation.Min(0).Error("Family ID must be a positive integer or zero for new family record")),
 			validation.Field(&v.UserID, validation.Required.Error("User ID is required"), validation.Min(1).Error("User ID must be a positive integer")),
 			validation.Field(&v.Name, validation.Required.Error(msgErrorName), validation.Length(5, 50)),
 			validation.Field(&v.Dob, validation.Required.Error(msgErrorDob), validation.Match(regexp.MustCompile(`^\d{4}-\d{2}-\d{2}$`)).Error("Date must be in YYYY-MM-DD format"),
